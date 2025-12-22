@@ -1,0 +1,41 @@
+p{
+    font-family: Arial;
+}
+    .video-title{
+        font-weight: bold;
+        font-size: 18px;
+        width: 300px;
+        line-height: 24px;
+        margin-bottom: 5px;
+    }
+
+    .stats{
+        font-size: 14px;
+        color:rgb(58, 58, 58);
+        margin-top: 0;
+    }
+    .author{
+        font-size: 14px;
+        color:rgb(58, 58, 58);
+        margin-bottom: 20px;
+    }
+    .description{
+        font-size: 14px;
+        color:rgb(58, 58, 58);
+        width: 280px;
+        margin-top: 0;
+        margin-bottom: 100px;
+    }
+    .text{
+        margin-top: 50px;
+        font-size: 14px;
+        background-color:rgb(227, 65, 64) ;
+        color: white;
+        text-align: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    } 
+    .example:hover{
+        text-decoration-line: underline;
+        cursor: pointer;
+    }
