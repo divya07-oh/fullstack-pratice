@@ -23,3 +23,32 @@ function removeLastLunch(array) {
   return array;
 }
 
+function removeFirstLunch(array) {
+  if (array.length === 0) {
+    console.log("No lunches to remove.");
+    return array;
+  }
+
+  const removedLunch = array.shift();
+  console.log(`${removedLunch} removed from the start of the lunch menu.`);
+  return array;
+}
+
+function getRandomLunch(array) {
+  if (array.length === 0) {
+    console.log("No lunches available.");
+    return;
+  }
+
+  const randomIndex = Math.floor(Math.random() * array.length);
+  console.log(`Randomly selected lunch: ${array[randomIndex]}`);
+}
+
+function showLunchMenu(array) {
+  if (array.length === 0) {
+    console.log("The menu is empty.");
+    return;
+  }
+
+  console.log(`Menu items: ${array.join(", ")}`);
+}
