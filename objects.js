@@ -43,3 +43,16 @@ function validateManifest(manifest) {
   return errors;
 }
 
+function processManifest(manifest) {
+  const validationErrors = validateManifest(manifest);
+
+  if (Object.keys(validationErrors).length === 0) {
+    const normalizedManifest = normalizeUnits(manifest);
+
+    console.log(`Validation success: ${manifest.containerId}`);
+    console.log(`Total weight: ${normalizedManifest.weight} kg`);
+  } else {
+    console.log(`Validation error: ${manifest.containerId}`);
+    console.log(validationErrors);
+  }
+}
