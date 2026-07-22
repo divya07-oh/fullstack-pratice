@@ -167,3 +167,15 @@ function validateManifest(manifest) {
   return result;
 }
 
+function processManifest(manifest) {
+  const validation = validateManifest(manifest);
+
+  if (Object.keys(validation).length === 0) {
+    const normalized = normalizeUnits(manifest);
+    console.log(`Validation success: ${manifest.containerId}`);
+    console.log(`Total weight: ${normalized.weight} kg`);
+  } else {
+    console.log(`Validation error: ${manifest.containerId}`);
+    console.log(validation);
+  }
+}
