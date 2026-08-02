@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>student grade tracker</title>
+<style>
+    body {
+      background: #1a1a2e;
+      color: #eaeaea;
+      display: flex;
+      justify-content:center;
+      padding: 30px 15px;
+    }
+    .card {
+        background: #16213e;
+        border-radius: 10px;
+        padding: 25px;
+        width: 100%;
+        max-width: 480px;
+    }
+    button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        background: #4cc9f0;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #3ab0d8;
+    }
+    table{
+        width:100%;
+        margin-top:20px;
+        border-collapse: collapse;
+    }
+    th,td{
+        padding:10px;
+        text-align: left;
+        border-bottom:1px solid #2b2b45;
+        font-size:14px;
+    }
+    .grade-A{
+        color: #7CFC00; font-weight:bold; 
+    }
+    .grade-B{
+        color: #4cc9f0; font-weight:bold;
+    }
+    .grade-C{
+        color: #f4d35e; font-weight:bold;
+    }
+    .grade-D{
+        color: #f26c54; font-weight:bold;
+    }
+    .delete-btn {
+        background: #f26c54;
+        padding:4px 8px;
+        width: auto;
+        font-size:12px;
+    }
+    .summary{
+        margin-top: 15px;
+        font-size:14px;
+        color: #b8b8b1;
+    }
+</style>
+</head>
+ <body>
+    <div class="card">
+        <h1>student grade tracker</h1>
+
+        <input type="text" id="nameInput" placeholder="Enter student name">
+        <input type="number" id="marksInput" placeholder="marks (out of 100)">
+        <button onClick="handleAddStudent()">Add student</button>
+
+        <table id="studentTable">
+            <thead>
+                <tr><th>name</th><th>marks</th><th>grade</th><th></th></tr>
+            </thead>
+            <tbody id="tablebody">
+            </tbody>
+        </table>
+<p class="summary" id="summary"></p>
+    </div>
+    <script>
+        let students =[];
+        function calculateGrade(marks){
+            if (marks >= 90) {
+            return "A";
+            }
+            else if (marks >=75 ){
+            return "B";
+            }
+            else if (marks >=50){
+                return "C";
+            }
+            else{
+                return "f";
+            }
+        }
+        const createStudent = (name, marks) => {
+            return{
+            name: name,
+            marks: marks,
+            grade: calculateGrade(marks) 
+        };
+        };
+        
+        function handleAddStudent(){
+            const nameInput = document.grtelementById("nameInput");
+            const marksInput = document.grtelementById("marksInput");
+            const name = nameInput.value.trim();
+            const marks = Number(marksInnput.value);
+            if (name ===""){
+                alert("please enter a student name");
+                return;
+            }
+            if(isNaN(marks) || marks<0 ||marks >100){
+                alert("please enter a valid marks between 0 to 100");
+                return;
+            }
+        }
+        
+    </script>
+</body>
+</html>
