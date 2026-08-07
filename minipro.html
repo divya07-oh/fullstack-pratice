@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HabitGrid — Streak Tracker</title>
+<style>
+  * { box-sizing: border-box; font-family: Arial, sans-serif; }
+  body {
+    background: #0d1117;
+    color: #e6edf3;
+    display: flex;
+    justify-content: center;
+    padding: 30px 15px;
+  }
+  .wrap { width: 100%; max-width: 640px; }
+  h1 { font-size: 20px; color: #58a6ff; margin-bottom: 4px; }
+  .sub { color: #8b949e; font-size: 13px; margin-bottom: 20px; }
+
+  input {
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #30363d;
+    background: #161b22;
+    color: #e6edf3;
+    margin-right: 8px;
+  }
+  button {
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    background: #238636;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  button:hover { background: #2ea043; }
+  button.ghost {
+    background: transparent;
+    border: 1px solid #30363d;
+    color: #8b949e;
+  }
+  button.ghost:hover { color: #e6edf3; border-color: #58a6ff; }
+
+  .habit-block {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 18px;
+  }
+  .habit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .habit-name { font-weight: bold; font-size: 15px; }
+  .habit-stats { font-size: 12px; color: #8b949e; }
+  .fire { color: #f0883e; }
+
+  /* GitHub-style contribution grid, built with CSS grid + flow */
+  .grid {
+    display: grid;
+    grid-template-rows: repeat(7, 13px);
+    grid-auto-flow: column;
+    gap: 3px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+  .cell {
+    width: 13px;
+    height: 13px;
+    border-radius: 3px;
+    background: #161b22;
+    border: 1px solid #21262d;
+    cursor: pointer;
+  }
+  .cell.done { background: #39d353; border-color: #39d353; }
+  .cell.today { outline: 1px solid #58a6ff; outline-offset: 1px; }
+  .cell:hover { border-color: #58a6ff; }
+
+  .empty {
+    color: #6e7681;
+    font-size: 13px;
+    text-align: center;
+    padding: 30px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>🔥 HabitGrid</h1>
+  <div class="sub">Track daily habits, GitHub-style. Click any square to mark it done.</div>
+
+  <div>
+    <input type="text" id="habitInput" placeholder="e.g. Practice DSA">
+    <button onclick="handleAddHabit()">Add Habit</button>
+  </div>
+
+  <div id="habitContainer"></div>
+</div>
+
+<script>
+/* ============================================================
+   HABITGRID — Daily Habit Streak Tracker
+   Concepts practiced: Date object manipulation, loops, objects,
+   arrays & array methods, conditionals, functions (regular +
+   arrow), template literals, DOM manipulation, events, closures.
+   ============================================================ */
+
+// ---------- 1. DATA STRUCTURE ----------
+// Each habit is an OBJECT with:
+//   name: string
+//   log: an OBJECT where keys are date strings ("2026-08-07")
+//        and values are true/false — a fast way to check
+//        "was this habit done on this date?" without looping
+//        through an array every time.
+let habits = [];
+
+// ---------- 2. FUNCTION: formatDate ----------
+// Converts a JS Date object into a consistent "YYYY-MM-DD" string.
+// We do this a LOT, so it's pulled into its own reusable function.
+function formatDate(date) {
+  const year = date.getFullYear();
+  // getMonth() is 0-indexed (0 = January), so we add 1.
+  // padStart ensures "8" becomes "08" — needed for correct string sorting/matching.
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+// ---------- 3. FUNCTION: getLastNDates ----------
+// Builds an ARRAY of the last N days (including today), oldest first.
+// Uses a LOOP combined with Date math (subtracting days in milliseconds).
+function getLastNDates(n) {
+  const dates = [];
+  const oneDayMs = 24 * 60 * 60 * 1000; // milliseconds in a day
+
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date(Date.now() - i * oneDayMs);
+    dates.push(d);
+  }
+  return dates;
+}
+
+// ---------- 4. FUNCTION: handleAddHabit ----------
+function handleAddHabit() {
+  const input = document.getElementById("habitInput");
+  const name = input.value.trim();
+
+  // Validation using a conditional
+  if (name === "") {
+    alert("Please enter a habit name.");
+    return;
+  }
+
+  // Create a new habit object and add it to the array
+  habits.push({
+    name: name,
+    log: {} // starts empty — no days marked done yet
+  });
+
+  input.value = "";
+  renderHabits();
+}
+
+// ---------- 5. FUNCTION: toggleDay ----------
+// Flips a specific date between done/not-done for a specific habit.
+// `habitIndex` and `dateKey` are passed in from the click event.
+function toggleDay(habitIndex, dateKey) {
+  const habit = habits[habitIndex];
+
+  // If it's already marked done, remove it (toggle off).
+  // Otherwise mark it done (toggle on). Classic conditional toggle pattern.
+  if (habit.log[dateKey]) {
+    delete habit.log[dateKey];
+  } else {
+    habit.log[dateKey] = true;
+  }
+
+  renderHabits();
+}
+
+// ---------- 6. FUNCTION: calculateStreak ----------
+// The most interesting logic in this project: walks BACKWARD from
+// today, day by day, counting how many consecutive days were completed.
+// This is a great algorithmic pattern to understand deeply.
+function calculateStreak(log) {
+  let streak = 0;
+  let cursor = new Date(); // start from today
+
+  while (true) {
+    const key = formatDate(cursor);
+    if (log[key]) {
+      streak++;
+      // Move the cursor back one day and keep checking
+      cursor = new Date(cursor.getTime() - 24 * 60 * 60 * 1000);
+    } else {
+      // First gap found — streak stops here
+      break;
+    }
+  }
+  return streak;
+}
+
+// ---------- 7. FUNCTION: calculateCompletionRate ----------
+// Uses Object.keys() + array methods to compute a percentage
+// over the visible 90-day window.
+function calculateCompletionRate(log, totalDays) {
+  const completedDays = Object.keys(log).length;
+  if (totalDays === 0) return 0;
+  return Math.round((completedDays / totalDays) * 100);
+}
+
+// ---------- 8. FUNCTION: renderHabits ----------
+// Rebuilds the entire UI from the `habits` array — this is the
+// "single source of truth" pattern: state changes, then we redraw.
+function renderHabits() {
+  const container = document.getElementById("habitContainer");
+
+  // Conditional rendering: empty state vs actual content
+  if (habits.length === 0) {
+    container.innerHTML = `<div class="empty">No habits yet. Add one above to start tracking 👆</div>`;
+    return;
+  }
+
+  const last90Days = getLastNDates(90);
+  const todayKey = formatDate(new Date());
+
+  container.innerHTML = ""; // clear before re-render
+
+  // Loop through every habit and build its block
+  habits.forEach((habit, habitIndex) => {
+    const streak = calculateStreak(habit.log);
+    const rate = calculateCompletionRate(habit.log, 90);
+
+    // Build the 90-cell grid using .map() + .join() — turning an
+    // array of dates into an array of HTML strings, then one string.
+    const cellsHtml = last90Days.map((date) => {
+      const key = formatDate(date);
+      const isDone = Boolean(habit.log[key]);
+      const isToday = key === todayKey;
+
+      // Template literal builds each cell, with conditional classes
+      return `<div
+        class="cell ${isDone ? "done" : ""} ${isToday ? "today" : ""}"
+        title="${key}"
+        onclick="toggleDay(${habitIndex}, '${key}')"
+      ></div>`;
+    }).join("");
+
+    const streakLabel = streak > 0
+      ? `<span class="fire">🔥 ${streak} day streak</span>`
+      : `No active streak`;
+
+    const block = `
+      <div class="habit-block">
+        <div class="habit-header">
+          <div class="habit-name">${habit.name}</div>
+          <div class="habit-stats">${streakLabel} · ${rate}% done (90 days)</div>
+        </div>
+        <div class="grid">${cellsHtml}</div>
+      </div>
+    `;
+
+    container.innerHTML += block;
+  });
+}
+
+// ---------- Initial render on page load ----------
+renderHabits();
+</script>
+
+</body>
+</html>
