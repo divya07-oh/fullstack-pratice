@@ -87,9 +87,58 @@ export default function App() {
         });
       }, 1000);
     }
+  // ---------- useEffect: reacts when the timer hits zero ----------
+  useEffect(() => {
+    if (secondsLeft === 0 && isRunning) {
+      // Log the session that just finished
+      setSessions((prev) => [
+        { type: mode, time: new Date().toLocaleTimeString() },
+        ...prev,
+      ]);
 
-    // Cleanup: always clear the interval when isRunning changes or component unmounts.
-    // Forgetting this is one of the most common React bugs — multiple timers stacking up.
-    return () => clearInterval(intervalRef.current);
-  }, [isRunning]);
+      // Switch modes: focus -> break, break -> focus
+      const nextMode = mode === "focus" ? "break" : "focus";
+      setMode(nextMode);
+      setSecondsLeft(nextMode === "focus" ? FOCUS_MINUTES * 60 : BREAK_MINUTES * 60);
+      setIsRunning(false); // pause so the user consciously starts the next session
+    }
+  }, [secondsLeft, isRunning, mode]);
 
+  function handleReset() {
+    setIsRunning(false);
+    setMode("focus");
+    setSecondsLeft(FOCUS_MINUTES * 60);
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
+      <div className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-2xl p-8">
+        <h1 className="text-lg font-bold text-slate-100 mb-6 text-center">🍅 Pomodoro Timer</h1>
+
+        <TimerDisplay secondsLeft={secondsLeft} mode={mode} />
+
+        <div className="flex justify-center gap-3 mt-6">
+          <button
+            onClick={() => setIsRunning(!isRunning)}
+            className="flex items-center gap-2 bg-amber-400 text-slate-900 font-medium px-4 py-2 rounded-lg hover:bg-amber-300"
+          >
+            {/* Conditional rendering: Play vs Pause icon + label */}
+            {isRunning ? <Pause size={16} /> : <Play size={16} />}
+            {isRunning ? "Pause" : "Start"}
+          </button>
+          <button
+            onClick={handleReset}
+            className="flex items-center gap-2 border border-slate-700 text-slate-400 px-4 py-2 rounded-lg hover:text-slate-100 hover:border-slate-500"
+          >
+            <RotateCcw size={16} />
+            Reset
+          </button>
+        </div>
+
+        <SessionLog sessions={sessions} />
+      </div>
+    </div>
+  );
+}
+
+  
