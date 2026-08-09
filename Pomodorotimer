@@ -1,0 +1,65 @@
+import React, { useState, useEffect, useRef } from "react";
+import { Play, Pause, RotateCcw, Coffee, Brain } from "lucide-react";
+
+/* ============================================================
+   POMODORO FOCUS TIMER — a React mini-project
+   Concepts practiced: components, props, state, conditional
+   rendering, and useEffect (for the live countdown timer).
+   ============================================================ */
+
+const FOCUS_MINUTES = 25;
+const BREAK_MINUTES = 5;
+
+// ---------- CHILD COMPONENT: TimerDisplay ----------
+// Purely presentational — receives everything it needs as PROPS
+// and just renders it. Doesn't know anything about timers or state logic.
+function TimerDisplay({ secondsLeft, mode }) {
+  const minutes = Math.floor(secondsLeft / 60);
+  const seconds = secondsLeft % 60;
+  // padStart keeps "05" instead of "5" for a proper clock look
+  const display = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+  return (
+    <div className="text-center">
+      {/* Conditional rendering: different icon + label depending on mode */}
+      <div className="flex items-center justify-center gap-2 mb-2 text-sm">
+        {mode === "focus" ? (
+          <>
+            <Brain size={16} className="text-amber-400" />
+            <span className="text-amber-400 font-medium">Focus session</span>
+          </>
+        ) : (
+          <>
+            <Coffee size={16} className="text-emerald-400" />
+            <span className="text-emerald-400 font-medium">Break time</span>
+          </>
+        )}
+      </div>
+      <div className="text-6xl font-bold text-slate-100 tabular-nums">{display}</div>
+    </div>
+  );
+}
+
+// ---------- CHILD COMPONENT: SessionLog ----------
+// Receives an array of completed sessions as a prop and renders it.
+function SessionLog({ sessions }) {
+  // Conditional rendering: empty state vs list
+  if (sessions.length === 0) {
+    return <p className="text-slate-500 text-sm text-center mt-6">No sessions completed yet.</p>;
+  }
+
+  return (
+    <div className="mt-6">
+      <p className="text-slate-400 text-xs mb-2">Today's sessions</p>
+      <div className="space-y-1">
+        {sessions.map((session, index) => (
+          <div key={index} className="flex justify-between text-xs text-slate-400 border-b border-slate-800 py-1">
+            <span>{session.type === "focus" ? "🧠 Focus" : "☕ Break"}</span>
+            <span>{session.time}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
