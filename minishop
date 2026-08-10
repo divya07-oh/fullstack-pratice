@@ -61,3 +61,36 @@ function cartReducer(state, action) {
   }
 }
 
+// ---------- 4. CART PROVIDER ----------
+// Wraps the app and makes cart state + dispatch available to
+// EVERY component inside it, no matter how deeply nested.
+function CartProvider({ children }) {
+  const [cart, dispatch] = useReducer(cartReducer, []);
+  return (
+    <CartContext.Provider value={{ cart, dispatch }}>
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+// ---------- 5. CHILD COMPONENT: ProductCard ----------
+// Notice: this component does NOT receive cart data as a prop.
+// It reaches into CartContext directly using useContext.
+function ProductCard({ product }) {
+  const { dispatch } = useContext(CartContext);
+
+  return (
+    <div className="flex items-center justify-between bg-slate-800/60 border border-slate-700 rounded-lg px-4 py-3">
+      <div>
+        <p className="text-slate-100 text-sm font-medium">{product.name}</p>
+        <p className="text-slate-500 text-xs">₹{product.price}</p>
+      </div>
+      <button
+        onClick={() => dispatch({ type: "ADD_ITEM", product })}
+        className="text-xs bg-amber-400 text-slate-900 font-medium px-3 py-1.5 rounded-md hover:bg-amber-300"
+      >
+        Add
+      </button>
+    </div>
+  );
+}
