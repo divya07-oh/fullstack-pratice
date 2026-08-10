@@ -1,0 +1,32 @@
+import React, { createContext, useContext, useReducer } from "react";
+import { ShoppingCart, Plus, Minus, Trash2, Store } from "lucide-react";
+
+/* ============================================================
+   MINI SHOP — a React mini-project
+   New concept introduced: the CONTEXT API.
+   Until now, every project passed data down via props. That
+   works fine for small apps, but imagine a "cart icon" nested
+   5 components deep — you'd have to pass cartCount through
+   every single component in between just to reach it
+   ("prop drilling"). Context lets any component reach into
+   shared state directly, without that chain.
+   ============================================================ */
+
+// ---------- 1. PRODUCT DATA ----------
+const PRODUCTS = [
+  { id: 1, name: "Mechanical Keyboard", price: 2499 },
+  { id: 2, name: "Wireless Mouse", price: 899 },
+  { id: 3, name: "USB-C Hub", price: 1299 },
+  { id: 4, name: "Laptop Stand", price: 1599 },
+];
+
+// ---------- 2. CREATE THE CONTEXT ----------
+// This is like creating a "channel" that any component can tune into.
+const CartContext = createContext();
+
+// ---------- 3. REDUCER FUNCTION ----------
+// useReducer is like useState, but better suited for state with
+// multiple related actions (add, remove, increase, decrease).
+// It takes the current state + an "action" describing what happened,
+// and returns the NEW state. Similar idea to a light switch:
+// action.type tells the reducer which "switch" was flipped.
