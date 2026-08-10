@@ -94,3 +94,62 @@ function ProductCard({ product }) {
     </div>
   );
 }
+
+// ---------- 6. CHILD COMPONENT: CartPanel ----------
+// Also reaches directly into CartContext — no props passed from App at all.
+function CartPanel() {
+  const { cart, dispatch } = useContext(CartContext);
+
+  // Derived value: total price, calculated with .reduce()
+  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+  return (
+    <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 mt-5">
+      <div className="flex items-center gap-2 mb-3">
+        <ShoppingCart size={16} className="text-amber-400" />
+        <p className="text-slate-100 text-sm font-medium">Your Cart</p>
+      </div>
+
+      {/* Conditional rendering: empty cart vs items */}
+      {cart.length === 0 ? (
+        <p className="text-slate-500 text-xs">Cart is empty — add something above.</p>
+      ) : (
+        <>
+          <div className="space-y-2">
+            {cart.map((item) => (
+              <div key={item.id} className="flex items-center justify-between text-xs">
+                <span className="text-slate-300">{item.name}</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => dispatch({ type: "DECREASE", id: item.id })}
+                    className="p-1 rounded bg-slate-800 hover:bg-slate-700"
+                  >
+                    <Minus size={11} />
+                  </button>
+                  <span className="text-slate-100 w-4 text-center">{item.qty}</span>
+                  <button
+                    onClick={() => dispatch({ type: "INCREASE", id: item.id })}
+                    className="p-1 rounded bg-slate-800 hover:bg-slate-700"
+                  >
+                    <Plus size={11} />
+                  </button>
+                  <button
+                    onClick={() => dispatch({ type: "REMOVE", id: item.id })}
+                    className="p-1 rounded bg-slate-800 hover:bg-red-500/30 text-red-400 ml-1"
+                  >
+                    <Trash2 size={11} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="border-t border-slate-800 mt-3 pt-3 flex justify-between text-sm">
+            <span className="text-slate-400">Total</span>
+            <span className="text-amber-400 font-bold">₹{total}</span>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
