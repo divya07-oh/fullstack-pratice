@@ -1,18 +1,6 @@
 import React, { createContext, useContext, useReducer } from "react";
 import { ShoppingCart, Plus, Minus, Trash2, Store } from "lucide-react";
 
-/* ============================================================
-   MINI SHOP — a React mini-project
-   New concept introduced: the CONTEXT API.
-   Until now, every project passed data down via props. That
-   works fine for small apps, but imagine a "cart icon" nested
-   5 components deep — you'd have to pass cartCount through
-   every single component in between just to reach it
-   ("prop drilling"). Context lets any component reach into
-   shared state directly, without that chain.
-   ============================================================ */
-
-// ---------- 1. PRODUCT DATA ----------
 const PRODUCTS = [
   { id: 1, name: "Mechanical Keyboard", price: 2499 },
   { id: 2, name: "Wireless Mouse", price: 899 },
@@ -20,27 +8,17 @@ const PRODUCTS = [
   { id: 4, name: "Laptop Stand", price: 1599 },
 ];
 
-// ---------- 2. CREATE THE CONTEXT ----------
-// This is like creating a "channel" that any component can tune into.
 const CartContext = createContext();
 
-// ---------- 3. REDUCER FUNCTION ----------
-// useReducer is like useState, but better suited for state with
-// multiple related actions (add, remove, increase, decrease).
-// It takes the current state + an "action" describing what happened,
-// and returns the NEW state. Similar idea to a light switch:
-// action.type tells the reducer which "switch" was flipped.
 function cartReducer(state, action) {
   switch (action.type) {
     case "ADD_ITEM": {
       const existing = state.find((item) => item.id === action.product.id);
       if (existing) {
-        // Already in cart — increase quantity using .map()
         return state.map((item) =>
           item.id === action.product.id ? { ...item, qty: item.qty + 1 } : item
         );
       }
-      // New item — add it with qty 1
       return [...state, { ...action.product, qty: 1 }];
     }
     case "INCREASE":
@@ -52,7 +30,6 @@ function cartReducer(state, action) {
         .map((item) =>
           item.id === action.id ? { ...item, qty: item.qty - 1 } : item
         )
-        // Remove any item whose quantity dropped to 0
         .filter((item) => item.qty > 0);
     case "REMOVE":
       return state.filter((item) => item.id !== action.id);
@@ -61,9 +38,6 @@ function cartReducer(state, action) {
   }
 }
 
-// ---------- 4. CART PROVIDER ----------
-// Wraps the app and makes cart state + dispatch available to
-// EVERY component inside it, no matter how deeply nested.
 function CartProvider({ children }) {
   const [cart, dispatch] = useReducer(cartReducer, []);
   return (
@@ -73,9 +47,6 @@ function CartProvider({ children }) {
   );
 }
 
-// ---------- 5. CHILD COMPONENT: ProductCard ----------
-// Notice: this component does NOT receive cart data as a prop.
-// It reaches into CartContext directly using useContext.
 function ProductCard({ product }) {
   const { dispatch } = useContext(CartContext);
 
@@ -95,12 +66,9 @@ function ProductCard({ product }) {
   );
 }
 
-// ---------- 6. CHILD COMPONENT: CartPanel ----------
-// Also reaches directly into CartContext — no props passed from App at all.
 function CartPanel() {
   const { cart, dispatch } = useContext(CartContext);
 
-  // Derived value: total price, calculated with .reduce()
   const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
   return (
@@ -110,7 +78,6 @@ function CartPanel() {
         <p className="text-slate-100 text-sm font-medium">Your Cart</p>
       </div>
 
-      {/* Conditional rendering: empty cart vs items */}
       {cart.length === 0 ? (
         <p className="text-slate-500 text-xs">Cart is empty — add something above.</p>
       ) : (
@@ -152,7 +119,7 @@ function CartPanel() {
     </div>
   );
 }
-// ---------- 7. SHOP COMPONENT (the actual page content) ----------
+
 function Shop() {
   return (
     <div className="w-full max-w-sm">
@@ -171,7 +138,7 @@ function Shop() {
     </div>
   );
 }
-// ---------- 8. APP: wraps everything in the CartProvider ----------
+
 export default function App() {
   return (
     <CartProvider>
@@ -181,4 +148,3 @@ export default function App() {
     </CartProvider>
   );
 }
-
