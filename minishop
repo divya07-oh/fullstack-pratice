@@ -30,3 +30,34 @@ const CartContext = createContext();
 // It takes the current state + an "action" describing what happened,
 // and returns the NEW state. Similar idea to a light switch:
 // action.type tells the reducer which "switch" was flipped.
+function cartReducer(state, action) {
+  switch (action.type) {
+    case "ADD_ITEM": {
+      const existing = state.find((item) => item.id === action.product.id);
+      if (existing) {
+        // Already in cart — increase quantity using .map()
+        return state.map((item) =>
+          item.id === action.product.id ? { ...item, qty: item.qty + 1 } : item
+        );
+      }
+      // New item — add it with qty 1
+      return [...state, { ...action.product, qty: 1 }];
+    }
+    case "INCREASE":
+      return state.map((item) =>
+        item.id === action.id ? { ...item, qty: item.qty + 1 } : item
+      );
+    case "DECREASE":
+      return state
+        .map((item) =>
+          item.id === action.id ? { ...item, qty: item.qty - 1 } : item
+        )
+        // Remove any item whose quantity dropped to 0
+        .filter((item) => item.qty > 0);
+    case "REMOVE":
+      return state.filter((item) => item.id !== action.id);
+    default:
+      return state;
+  }
+}
+
