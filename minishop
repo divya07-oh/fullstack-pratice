@@ -152,4 +152,23 @@ function CartPanel() {
     </div>
   );
 }
+// ---------- 7. SHOP COMPONENT (the actual page content) ----------
+function Shop() {
+  return (
+    <div className="w-full max-w-sm">
+      <div className="flex items-center gap-2 mb-4">
+        <Store className="text-amber-400" size={22} />
+        <h1 className="text-lg font-bold text-slate-100">Mini Shop</h1>
+      </div>
+
+      <div className="space-y-2">
+        {PRODUCTS.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+
+      <CartPanel />
+    </div>
+  );
+}
 
