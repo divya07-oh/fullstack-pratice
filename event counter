@@ -78,4 +78,14 @@
 
   <div class="countdown" id="countdownDisplay"></div>
 </div>
+<script>
+/* ============================================================
+   EVENT COUNTDOWN TIMER
+   Concepts practiced: variables, functions, conditionals,
+   Date object math, template literals, DOM manipulation,
+   events, and setInterval for live updates.
+   ============================================================ */
+
+// Holds the interval ID so we can stop it later (closure pattern)
+let countdownInterval = null;
 
