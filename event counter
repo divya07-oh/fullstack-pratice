@@ -58,4 +58,24 @@
     padding: 12px 10px;
     min-width: 60px;
   }
- 
+  .unit .num { font-size: 24px; font-weight: bold; color: #3fb950; }
+  .unit .label { font-size: 10px; color: #8b949e; margin-top: 2px; }
+
+  .eventName { margin-top: 14px; font-size: 14px; color: #e6edf3; }
+  .finished { color: #f0883e; font-weight: bold; margin-top: 14px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>⏳ Event Countdown</h1>
+
+  <input type="text" id="eventInput" placeholder="Event name (e.g. Exam Day)">
+  <input type="datetime-local" id="dateInput">
+  <button onclick="startCountdown()">Start Countdown</button>
+
+  <div class="eventName" id="eventName"></div>
+
+  <div class="countdown" id="countdownDisplay"></div>
+</div>
+
