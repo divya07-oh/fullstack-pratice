@@ -136,5 +136,22 @@ function startCountdown() {
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
     const seconds = Math.floor((diff / 1000) % 60);
+   // Template literal builds the four unit boxes
+    display.innerHTML = `
+      <div class="unit"><div class="num">${days}</div><div class="label">DAYS</div></div>
+      <div class="unit"><div class="num">${hours}</div><div class="label">HOURS</div></div>
+      <div class="unit"><div class="num">${minutes}</div><div class="label">MINS</div></div>
+      <div class="unit"><div class="num">${seconds}</div><div class="label">SECS</div></div>
+    `;
+  };
  
+  updateDisplay(); // run once immediately, so there's no 1-second blank delay
+  countdownInterval = setInterval(updateDisplay, 1000);
+}
+</script>
+ 
+</body>
+</html>
+ 
+
    
