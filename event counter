@@ -112,4 +112,21 @@ function startCountdown() {
   if (countdownInterval) {
     clearInterval(countdownInterval);
   }
+    eventNameBox.textContent = `Counting down to: ${eventName}`;
 
+  // ---------- FUNCTION (arrow, defined inline): updateDisplay ----------
+  // This runs immediately once, then repeats every second via setInterval.
+  const updateDisplay = () => {
+    const now = new Date();
+    // Difference in milliseconds between the target date and now
+    const diff = targetDate - now;
+
+    // Conditional: has the event already passed?
+    if (diff <= 0) {
+      display.innerHTML = "";
+      eventNameBox.innerHTML = `<div class="finished">🎉 "${eventName}" has arrived!</div>`;
+      clearInterval(countdownInterval);
+      return;
+    }
+
+  
