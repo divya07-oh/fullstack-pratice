@@ -88,4 +88,28 @@
 
 // Holds the interval ID so we can stop it later (closure pattern)
 let countdownInterval = null;
+// ---------- FUNCTION: startCountdown ----------
+// Runs when the button is clicked. Reads the event name and target
+// date from the inputs, validates them, then starts a live timer.
+function startCountdown() {
+  const eventInput = document.getElementById("eventInput");
+  const dateInput = document.getElementById("dateInput");
+  const eventNameBox = document.getElementById("eventName");
+  const display = document.getElementById("countdownDisplay");
+
+  const eventName = eventInput.value.trim() || "Your Event";
+  const targetDateValue = dateInput.value;
+
+  // Validation: make sure a date was actually picked
+  if (targetDateValue === "") {
+    alert("Please choose a date and time.");
+    return;
+  }
+
+  const targetDate = new Date(targetDateValue);
+
+  // Stop any previous countdown before starting a new one
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+  }
 
