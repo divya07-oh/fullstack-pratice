@@ -97,3 +97,60 @@ let state = {
   matches: 0,
   locked: false,       // prevents clicking during the "check match" pause
 };
+ 
+// ---------- 3. FUNCTION: shuffleArray ----------
+// A well-known algorithm (Fisher-Yates shuffle). Loops backward
+// through the array, swapping each item with a random earlier one.
+function shuffleArray(array) {
+  const arr = [...array]; // copy, so we don't mutate the original
+  for (let i = arr.length - 1; i > 0; i--) {
+    const randomIndex = Math.floor(Math.random() * (i + 1));
+    // Swap arr[i] and arr[randomIndex] using array destructuring
+    [arr[i], arr[randomIndex]] = [arr[randomIndex], arr[i]];
+  }
+  return arr;
+}
+ 
+// ---------- 4. FUNCTION: startGame ----------
+// Builds a fresh shuffled board and resets all state.
+function startGame() {
+  // Duplicate every symbol (so each has a pair), then shuffle
+  const doubledSymbols = [...symbols, ...symbols];
+  const shuffled = shuffleArray(doubledSymbols);
+ 
+  // Turn the array of symbols into an array of card OBJECTS
+  state.cards = shuffled.map((symbol) => ({
+    symbol: symbol,
+    flipped: false,
+    matched: false,
+  }));
+ 
+  state.flippedIndexes = [];
+  state.moves = 0;
+  state.matches = 0;
+  state.locked = false;
+ 
+  document.getElementById("winMessage").textContent = "";
+  renderBoard();
+  updateStats();
+}
+ 
+// ---------- 5. FUNCTION: handleTileClick ----------
+function handleTileClick(index) {
+  const card = state.cards[index];
+ 
+  // Conditions where a click should do nothing:
+  if (state.locked) return;              // waiting on a mismatch check
+  if (card.flipped || card.matched) return; // already revealed
+  if (state.flippedIndexes.length === 2) return; // two already flipped
+ 
+  card.flipped = true;
+  state.flippedIndexes.push(index);
+  renderBoard();
+ 
+  // Once two cards are flipped, check if they match
+  if (state.flippedIndexes.length === 2) {
+    state.moves++;
+    state.locked = true; // block further clicks briefly
+ 
+  
