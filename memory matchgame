@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Memory Match Game</title>
+<style>
+  * { box-sizing: border-box; font-family: Arial, sans-serif; }
+  body {
+    background: #0d1117;
+    color: #e6edf3;
+    display: flex;
+    justify-content: center;
+    padding: 40px 15px;
+  }
+  .card { max-width: 380px; width: 100%; text-align: center; }
+  h1 { font-size: 18px; color: #58a6ff; margin-bottom: 4px; }
+  .stats { font-size: 13px; color: #8b949e; margin-bottom: 16px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .tile {
+    aspect-ratio: 1 / 1;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .tile.flipped {
+    background: #1f2937;
+    border-color: #58a6ff;
+  }
+  .tile.matched {
+    background: #0f3d24;
+    border-color: #3fb950;
+    cursor: default;
+  }
+  .tile.hidden-symbol { color: transparent; }
+
+  button {
+    margin-top: 18px;
+    padding: 9px 16px;
+    background: #238636;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  button:hover { background: #2ea043; }
+
+ 
