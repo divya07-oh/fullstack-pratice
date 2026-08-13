@@ -152,5 +152,79 @@ function handleTileClick(index) {
   if (state.flippedIndexes.length === 2) {
     state.moves++;
     state.locked = true; // block further clicks briefly
+   const [firstIndex, secondIndex] = state.flippedIndexes;
+    const firstCard = state.cards[firstIndex];
+    const secondCard = state.cards[secondIndex];
  
+    if (firstCard.symbol === secondCard.symbol) {
+      // It's a match!
+      firstCard.matched = true;
+      secondCard.matched = true;
+      state.matches++;
+      state.flippedIndexes = [];
+      state.locked = false;
+      renderBoard();
+      updateStats();
+      checkWin();
+    } else {
+      // Not a match — flip them back after a short delay so the
+      // player has time to see what they picked.
+      setTimeout(() => {
+        firstCard.flipped = false;
+        secondCard.flipped = false;
+        state.flippedIndexes = [];
+        state.locked = false;
+        renderBoard();
+      }, 800);
+    }
+ 
+    updateStats();
+  }
+}
+ 
+// ---------- 6. FUNCTION: checkWin ----------
+function checkWin() {
+  if (state.matches === symbols.length) {
+    document.getElementById("winMessage").textContent =
+      `🎉 Solved in ${state.moves} moves!`;
+  }
+}
+ 
+// ---------- 7. FUNCTION: renderBoard ----------
+// Loops through state.cards and builds the tile grid using .map().
+function renderBoard() {
+  const grid = document.getElementById("grid");
+ 
+  grid.innerHTML = state.cards
+    .map((card, index) => {
+      const isVisible = card.flipped || card.matched;
+      const classNames = [
+        "tile",
+        card.flipped ? "flipped" : "",
+        card.matched ? "matched" : "",
+        isVisible ? "" : "hidden-symbol",
+      ].join(" ");
+ 
+      // Show the symbol only if flipped/matched, otherwise show a blank tile
+      const content = isVisible ? card.symbol : "";
+ 
+      return `<div class="${classNames}" onclick="handleTileClick(${index})">${content}</div>`;
+    })
+    .join("");
+}
+ 
+// ---------- 8. FUNCTION: updateStats ----------
+function updateStats() {
+  document.getElementById("stats").textContent =
+    `Moves: ${state.moves} | Matches: ${state.matches} / ${symbols.length}`;
+}
+ 
+// ---------- Start the game on page load ----------
+startGame();
+</script>
+ 
+</body>
+</html>
+ 
+
   
