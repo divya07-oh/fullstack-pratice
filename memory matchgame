@@ -57,3 +57,43 @@
   button:hover { background: #2ea043; }
 
  
+  .win-message {
+    margin-top: 14px;
+    color: #3fb950;
+    font-weight: bold;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+ 
+<div class="card">
+  <h1>🧠 Memory Match</h1>
+  <div class="stats" id="stats">Moves: 0 | Matches: 0 / 8</div>
+ 
+  <div class="grid" id="grid"></div>
+ 
+  <div class="win-message" id="winMessage"></div>
+  <button onclick="startGame()">Restart Game</button>
+</div>
+ 
+<script>
+/* ============================================================
+   MEMORY MATCH GAME
+   Concepts practiced: variables, functions, conditionals,
+   loops, arrays (shuffle algorithm), objects, template
+   literals, DOM manipulation, events, setTimeout.
+   ============================================================ */
+ 
+// ---------- 1. DATA: the symbol pairs ----------
+// Only 8 unique symbols, but each will appear TWICE in the grid.
+const symbols = ["🍎", "🍌", "🍇", "🍉", "🍓", "🍒", "🍍", "🥝"];
+ 
+// ---------- 2. STATE: grouped into one object ----------
+let state = {
+  cards: [],          // array of {symbol, flipped, matched}
+  flippedIndexes: [],  // currently flipped (max 2 at a time)
+  moves: 0,
+  matches: 0,
+  locked: false,       // prevents clicking during the "check match" pause
+};
