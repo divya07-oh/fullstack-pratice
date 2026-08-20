@@ -211,3 +211,27 @@ function renderResult(playerChoice, computerChoice, winner) {
   }
 }
 
+// ---------- 10. FUNCTION: renderScoreboard ----------
+function renderScoreboard() {
+  document.getElementById("playerScore").textContent = scores.player;
+  document.getElementById("computerScore").textContent = scores.computer;
+  document.getElementById("drawScore").textContent = scores.draws;
+}
+
+// ---------- 11. FUNCTION: resetGame ----------
+function resetGame() {
+  scores = { player: 0, computer: 0, draws: 0 };
+  currentStreak = 0;
+  renderScoreboard();
+  document.getElementById("resultBox").innerHTML =
+    `<div class="vs-line">Make your move to start</div>`;
+  document.getElementById("streakLabel").textContent = "";
+}
+</script>
+
+</body>
+</html>
+
+
+
+
