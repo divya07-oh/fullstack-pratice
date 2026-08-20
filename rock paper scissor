@@ -85,4 +85,19 @@
     <button class="choice-btn" onclick="play('paper')">✋</button>
     <button class="choice-btn" onclick="play('scissors')">✌️</button>
   </div>
+  <div class="result-box" id="resultBox">
+    <div class="vs-line">Make your move to start</div>
+  </div>
+
+  <div class="streak" id="streakLabel"></div>
+  <button class="reset-btn" onclick="resetGame()">Reset Scores</button>
+</div>
+
+<script>
+/* ============================================================
+   ROCK PAPER SCISSORS
+   Concepts practiced: variables, functions, conditionals
+   (including nested logic for win/lose/draw rules), objects,
+   arrays, template literals, DOM manipulation, events.
+   ============================================================ */
 
