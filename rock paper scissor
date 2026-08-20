@@ -32,4 +32,57 @@
   }
   .scoreboard .num { font-size: 20px; font-weight: bold; color: #e6edf3; display: block; }
 
- 
+  .choices { display: flex; justify-content: center; gap: 12px; margin: 20px 0; }
+  .choice-btn {
+    font-size: 28px;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+  }
+  .choice-btn:hover { border-color: #58a6ff; }
+
+  .result-box {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px;
+    min-height: 60px;
+  }
+  .vs-line { font-size: 15px; margin-bottom: 6px; }
+  .verdict { font-weight: bold; font-size: 14px; }
+  .win { color: #3fb950; }
+  .lose { color: #f85149; }
+  .draw { color: #f0883e; }
+
+  .streak { margin-top: 10px; font-size: 12px; color: #8b949e; }
+  .reset-btn {
+    margin-top: 14px;
+    padding: 8px 14px;
+    background: #30363d;
+    border: none;
+    border-radius: 6px;
+    color: #e6edf3;
+    cursor: pointer;
+  }
+  .reset-btn:hover { background: #3d444d; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>✊✋✌️ Rock Paper Scissors</h1>
+
+  <div class="scoreboard">
+    <div>You <span class="num" id="playerScore">0</span></div>
+    <div>Draws <span class="num" id="drawScore">0</span></div>
+    <div>Computer <span class="num" id="computerScore">0</span></div>
+  </div>
+
+  <div class="choices">
+    <button class="choice-btn" onclick="play('rock')">✊</button>
+    <button class="choice-btn" onclick="play('paper')">✋</button>
+    <button class="choice-btn" onclick="play('scissors')">✌️</button>
+  </div>
+
