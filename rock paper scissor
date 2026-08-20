@@ -100,4 +100,28 @@
    (including nested logic for win/lose/draw rules), objects,
    arrays, template literals, DOM manipulation, events.
    ============================================================ */
+// ---------- 1. GAME DATA ----------
+const CHOICES = ["rock", "paper", "scissors"];
+const EMOJI = { rock: "✊", paper: "✋", scissors: "✌️" };
+
+// ---------- 2. RULES TABLE ----------
+// Instead of writing long if/else chains for every matchup,
+// we store the rule as DATA: "what beats what". This object
+// says "rock beats scissors", "paper beats rock", etc.
+// This is the same lookup-table pattern from the Morse project.
+const BEATS = {
+  rock: "scissors",
+  paper: "rock",
+  scissors: "paper",
+};
+
+// ---------- 3. STATE ----------
+let scores = { player: 0, computer: 0, draws: 0 };
+let currentStreak = 0;
+
+// ---------- 4. FUNCTION: getComputerChoice ----------
+function getComputerChoice() {
+  const randomIndex = Math.floor(Math.random() * CHOICES.length);
+  return CHOICES[randomIndex];
+}
 
