@@ -124,4 +124,19 @@ function getComputerChoice() {
   const randomIndex = Math.floor(Math.random() * CHOICES.length);
   return CHOICES[randomIndex];
 }
+// ---------- 5. FUNCTION: decideWinner ----------
+// Takes both choices and returns "player", "computer", or "draw".
+// Uses the BEATS lookup table instead of writing out every
+// possible combination by hand.
+function decideWinner(playerChoice, computerChoice) {
+  if (playerChoice === computerChoice) {
+    return "draw";
+  }
+  // If the thing the player picked "beats" what the computer picked,
+  // the player wins. Otherwise, the computer wins.
+  if (BEATS[playerChoice] === computerChoice) {
+    return "player";
+  }
+  return "computer";
+}
 
