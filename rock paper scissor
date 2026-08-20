@@ -139,4 +139,39 @@ function decideWinner(playerChoice, computerChoice) {
   }
   return "computer";
 }
+// ---------- 6. FUNCTION: play ----------
+// Runs when the user clicks a choice button.
+function play(playerChoice) {
+  const computerChoice = getComputerChoice();
+  const winner = decideWinner(playerChoice, computerChoice);
+
+  updateScores(winner);
+  updateStreak(winner);
+  renderResult(playerChoice, computerChoice, winner);
+  renderScoreboard();
+}
+
+// ---------- 7. FUNCTION: updateScores ----------
+function updateScores(winner) {
+  if (winner === "player") {
+    scores.player++;
+  } else if (winner === "computer") {
+    scores.computer++;
+  } else {
+    scores.draws++;
+  }
+}
+
+// ---------- 8. FUNCTION: updateStreak ----------
+function updateStreak(winner) {
+  if (winner === "player") {
+    // Only increase the streak if it was already a winning streak,
+    // otherwise start a fresh one at 1.
+    currentStreak = currentStreak > 0 ? currentStreak + 1 : 1;
+  } else if (winner === "computer") {
+    currentStreak = currentStreak < 0 ? currentStreak - 1 : -1;
+  } else {
+    currentStreak = 0; // a draw breaks any streak
+  }
+}
 
