@@ -175,3 +175,39 @@ function updateStreak(winner) {
   }
 }
 
+// ---------- 9. FUNCTION: renderResult ----------
+function renderResult(playerChoice, computerChoice, winner) {
+  const resultBox = document.getElementById("resultBox");
+
+  let verdictText = "";
+  let verdictClass = "";
+
+  // Conditional rendering of the verdict text/color
+  if (winner === "player") {
+    verdictText = "You win! 🎉";
+    verdictClass = "win";
+  } else if (winner === "computer") {
+    verdictText = "Computer wins.";
+    verdictClass = "lose";
+  } else {
+    verdictText = "It's a draw.";
+    verdictClass = "draw";
+  }
+
+  // Template literal builds the whole result block
+  resultBox.innerHTML = `
+    <div class="vs-line">${EMOJI[playerChoice]} vs ${EMOJI[computerChoice]}</div>
+    <div class="verdict ${verdictClass}">${verdictText}</div>
+  `;
+
+  // Show streak info only if it's meaningful (2 or more in a row)
+  const streakLabel = document.getElementById("streakLabel");
+  if (currentStreak >= 2) {
+    streakLabel.textContent = `🔥 You're on a ${currentStreak}-win streak!`;
+  } else if (currentStreak <= -2) {
+    streakLabel.textContent = `😬 Computer is on a ${Math.abs(currentStreak)}-win streak.`;
+  } else {
+    streakLabel.textContent = "";
+  }
+}
+
