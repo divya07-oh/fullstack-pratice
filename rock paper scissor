@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rock Paper Scissors</title>
+<style>
+  * { box-sizing: border-box; font-family: Arial, sans-serif; }
+  body {
+    background: #0d1117;
+    color: #e6edf3;
+    display: flex;
+    justify-content: center;
+    padding: 50px 15px;
+  }
+  .card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 24px;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+  }
+  h1 { font-size: 18px; color: #58a6ff; margin-top: 0; }
+
+  .scoreboard {
+    display: flex;
+    justify-content: space-around;
+    margin: 16px 0;
+    font-size: 13px;
+    color: #8b949e;
+  }
+  .scoreboard .num { font-size: 20px; font-weight: bold; color: #e6edf3; display: block; }
+
+ 
