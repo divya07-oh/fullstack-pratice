@@ -427,4 +427,35 @@ function setFilter(filter, button) {
 
     renderTasks();
 }
+function clearCompleted() {
+
+    tasks = tasks.filter(function(task) {
+        return !task.completed;
+    });
+
+    renderTasks();
+}
+
+function updateCounter() {
+
+    const count = document.getElementById("taskCount");
+
+    const activeTasks = tasks.filter(function(task) {
+        return !task.completed;
+    }).length;
+
+    if (activeTasks === 1) {
+        count.textContent = "1 task remaining";
+    } else {
+        count.textContent = activeTasks + " tasks remaining";
+    }
+}
+
+renderTasks();
+
+</script>
+
+</body>
+</html>
+
 
